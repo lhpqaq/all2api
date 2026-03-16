@@ -1,0 +1,36 @@
+server:
+  addr: "0.0.0.0:8848"
+  read_timeout: "30s"
+  write_timeout: "0s"
+  idle_timeout: "120s"
+  api_keys: ["1"]
+  # - "sk-your-secret-key-here"
+routing:
+  default_upstream: "auto"
+  upstream_header: "X-All2API-Upstream"
+  model_map:
+    cursor: "anthropic/claude-sonnet-4.6"
+tooling:
+  emulate:
+    enabled: true
+    max_scan_bytes: 262144
+    smart_quotes: true
+    fuzzy_key_match: true
+    debug: false
+    retry_on_refusal: true
+    max_retries: 2
+logging:
+  debug: false
+upstreams:
+  cursor:
+    type: "cursor"
+    base_url: "https://cursor.com"
+    timeout: "120s"
+    proxy: ""
+    headers: {}
+    models:
+      - "anthropic/claude-sonnet-4.6"
+    capabilities:
+      native_tool_calls: false
+    auth:
+      kind: "none"

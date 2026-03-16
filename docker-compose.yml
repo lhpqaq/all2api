@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  all2api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: all2api:latest
+    container_name: all2api
+    restart: unless-stopped
+    ports:
+      - "8848:8848"
+    volumes:
+      # 将本地 config 目录挂载到容器内；首次启动会自动从 config.yaml.example 生成 config.yaml
+      - ./config:/app/config
+    environment:
+      - ALL2API_DEBUG=true
+      # 可选：HTTP 代理（全局），如不需要请删除
+      # - HTTP_PROXY=http://host.docker.internal:7890
+      # - HTTPS_PROXY=http://host.docker.internal:7890
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8848/v1/models"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
